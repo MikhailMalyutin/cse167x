@@ -39,10 +39,16 @@ public class Model {
 //    GLfloat shininess ;
 //
 //// For multiple objects, read from a file.
+    private int maxdepth = 5;
+    private String output;
     private List<RealVector> vertices = new ArrayList<>();
     final int maxobjects = 10 ;
     private int numobjects ;
     private List<DrawedObject> objects = new ArrayList<>();
+    private RealVector from;
+    private RealVector to;
+    private RealVector up;
+    private float fov;
 
     public int getW() {
         return w;
@@ -86,5 +92,53 @@ public class Model {
 
     public void setObjects(List<DrawedObject> objects) {
         this.objects = objects;
+    }
+
+    public int getMaxdepth() {
+        return maxdepth;
+    }
+
+    public void setMaxdepth(int maxdepth) {
+        this.maxdepth = maxdepth;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
+    }
+
+    public void setFrom(RealVector from) {
+        this.from = from;
+    }
+
+    public RealVector getFrom() {
+        return from;
+    }
+
+    public void setTo(RealVector to) {
+        this.to = to;
+    }
+
+    public RealVector getTo() {
+        return to;
+    }
+
+    public void setUp(RealVector up) {
+        this.up = up;
+    }
+
+    public RealVector getUp() {
+        return up;
+    }
+
+    public void setFov(float fov) {
+        this.fov = fov;
+    }
+
+    public float getFov() {
+        return fov;
     }
 }
