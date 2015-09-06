@@ -1,3 +1,10 @@
+package scene;
+
+import org.apache.commons.math3.linear.RealVector;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Model {
 //    int amount; // The amount of rotation for each arrow press
 //    vec3 eye; // The (regularly updated) vector coordinates of the eye
@@ -31,16 +38,8 @@ public class Model {
 //    GLfloat shininess ;
 //
 //// For multiple objects, read from a file.
-//    final int maxobjects = 10 ;
-//    int numobjects ;
-//    struct object {
-//        shape type ;
-//        GLfloat size ;
-//        GLfloat ambient[4] ;
-//        GLfloat diffuse[4] ;
-//        GLfloat specular[4] ;
-//        GLfloat emission[4] ;
-//        GLfloat shininess ;
-//        mat4 transform ;
-//    } objects[maxobjects] ;
+    private static List<RealVector> vertices = new ArrayList<>();
+    final static int maxobjects = 10 ;
+    private static int numobjects ;
+    private static List<DrawedObject> objects = new ArrayList<>();
 }
