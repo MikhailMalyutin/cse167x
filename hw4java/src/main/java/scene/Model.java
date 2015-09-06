@@ -14,7 +14,8 @@ public class Model {
 //    vec3 upinit ;
 //    vec3 center ;
 //    int amountinit;
-//    int w, h ;
+    private int w;
+    private int h;
 //    float fovy ;
 //
 //    static enum {view, translate, scale} transop ; // which operation to transform
@@ -38,8 +39,52 @@ public class Model {
 //    GLfloat shininess ;
 //
 //// For multiple objects, read from a file.
-    private static List<RealVector> vertices = new ArrayList<>();
-    final static int maxobjects = 10 ;
-    private static int numobjects ;
-    private static List<DrawedObject> objects = new ArrayList<>();
+    private List<RealVector> vertices = new ArrayList<>();
+    final int maxobjects = 10 ;
+    private int numobjects ;
+    private List<DrawedObject> objects = new ArrayList<>();
+
+    public int getW() {
+        return w;
+    }
+
+    public void setW(int w) {
+        this.w = w;
+    }
+
+    public int getH() {
+        return h;
+    }
+
+    public void setH(int h) {
+        this.h = h;
+    }
+
+    public List<RealVector> getVertices() {
+        return vertices;
+    }
+
+    public void setVertices(List<RealVector> vertices) {
+        this.vertices = vertices;
+    }
+
+    public int getMaxobjects() {
+        return maxobjects;
+    }
+
+    public int getNumobjects() {
+        return numobjects;
+    }
+
+    public void setNumobjects(int numobjects) {
+        this.numobjects = numobjects;
+    }
+
+    public List<DrawedObject> getObjects() {
+        return objects;
+    }
+
+    public void setObjects(List<DrawedObject> objects) {
+        this.objects = objects;
+    }
 }
