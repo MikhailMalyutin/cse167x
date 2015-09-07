@@ -5,21 +5,12 @@ import org.apache.commons.math3.linear.RealVector;
 
 public abstract class DrawedObject {
     //    shape type ;
-    private float size;
     private RealVector ambient;
     private RealVector diffuse;
     private RealVector specular;
     private RealVector emission;
     private float shininess;
     private RealMatrix transform;
-
-    public float getSize() {
-        return size;
-    }
-
-    public void setSize(float size) {
-        this.size = size;
-    }
 
     public RealVector getAmbient() {
         return ambient;

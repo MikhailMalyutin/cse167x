@@ -42,8 +42,6 @@ public class Model {
     private int maxdepth = 5;
     private String output;
     private List<RealVector> vertices = new ArrayList<>();
-    final int maxobjects = 10 ;
-    private int numobjects ;
     private List<DrawedObject> objects = new ArrayList<>();
     private RealVector from;
     private RealVector to;
@@ -72,18 +70,6 @@ public class Model {
 
     public void setVertices(List<RealVector> vertices) {
         this.vertices = vertices;
-    }
-
-    public int getMaxobjects() {
-        return maxobjects;
-    }
-
-    public int getNumobjects() {
-        return numobjects;
-    }
-
-    public void setNumobjects(int numobjects) {
-        this.numobjects = numobjects;
     }
 
     public List<DrawedObject> getObjects() {

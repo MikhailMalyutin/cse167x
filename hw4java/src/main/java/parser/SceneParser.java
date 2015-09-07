@@ -4,7 +4,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
+import scene.DrawedObject;
 import scene.Model;
+import scene.SphereObject;
 import scene.TriangleObject;
 import transform.MatrixUtils;
 import transform.Transform;
@@ -34,15 +36,23 @@ public class SceneParser {
                 result.setH(Integer.parseInt(commands[2]));
             } else if (operator.equals("vertex")) {
                 result.getVertices().add(readVec4(commands, 1));
-            } else if (operator.equals("tri")) {
-                int[] vertices = readInt(commands, 1, 3);
-                final TriangleObject triangleObject = new TriangleObject(vertices);
-                triangleObject.setAmbient(ambient);
-                triangleObject.setDiffuse(diffuse);
-                triangleObject.setSpecular(specular);
-                triangleObject.setEmission(emission);
-                triangleObject.setShininess(shininess);
-                result.getObjects().add(triangleObject);
+            } else if (operator.equals("tri") || operator.equals("sphere")) {
+                DrawedObject drawed;
+                if (operator.equals("tri")) {
+                    int[] vertices = readInt(commands, 1, 3);
+                    drawed = new TriangleObject(vertices);
+                } else {//operator.equals("sphere")
+                    RealVector center = readVec4(commands, 1);
+                    float radius = Float.valueOf(commands[4]);
+                    drawed = new SphereObject(radius, center);
+                }
+                drawed.setAmbient(ambient);
+                drawed.setDiffuse(diffuse);
+                drawed.setSpecular(specular);
+                drawed.setEmission(emission);
+                drawed.setShininess(shininess);
+                drawed.setTransform(transformStack.peek());
+                result.getObjects().add(drawed);
             } else if (operator.equals("camera")) {
                 RealVector from = readVec4(commands, 1);
                 RealVector to = readVec4(commands, 4);
@@ -101,7 +111,7 @@ public class SceneParser {
     }
 
     private static RealVector readVec4(String[] commands, int startIndex) {
-        double[] vector = readVector(commands, 1);
+        double[] vector = readVector(commands, startIndex);
         return new ArrayRealVector(vector);
     }
 
