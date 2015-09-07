@@ -62,15 +62,15 @@ public class SceneParser {
                 result.setTo(to);
                 result.setUp(up);
                 result.setFov(fov);
-            } else if (operator.equals("ambient ")) {
+            } else if (operator.equals("ambient")) {
                 ambient = readVec3(commands, 1);
-            } else if (operator.equals("diffuse ")) {
+            } else if (operator.equals("diffuse")) {
                 diffuse = readVec3(commands, 1);
-            } else if (operator.equals("specular ")) {
+            } else if (operator.equals("specular")) {
                 specular = readVec3(commands, 1);
             } else if (operator.equals("emission ")) {
                 emission = readVec3(commands, 1);
-            } else if (operator.equals("shininess ")) {
+            } else if (operator.equals("shininess")) {
                 shininess = Float.valueOf(commands[1]);
             } else if (operator.equals("translate")) {
                 RealVector transformVec = readVec3(commands, 1);
