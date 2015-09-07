@@ -2,11 +2,15 @@ package parser;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import scene.Model;
 import scene.TriangleObject;
+import transform.MatrixUtils;
+import transform.Transform;
 
 import java.io.File;
+import java.util.Stack;
 
 public class SceneParser {
     public static Model parse(File file) throws Exception {
@@ -19,6 +23,8 @@ public class SceneParser {
         RealVector specular = null;
         RealVector emission = null;
         float shininess = 0.0f;
+        Stack<RealMatrix> transformStack = new Stack<>();
+        transformStack.push(MatrixUtils.getIdentity());
 
         for (String line : lines) {
             String[] commands = line.split(" ");
@@ -56,6 +62,30 @@ public class SceneParser {
                 emission = readVec3(commands, 1);
             } else if (operator.equals("shininess ")) {
                 shininess = Float.valueOf(commands[1]);
+            } else if (operator.equals("translate")) {
+                RealVector transformVec = readVec3(commands, 1);
+                RealMatrix translateMat = Transform.translate(transformVec);
+                RealMatrix top = transformStack.pop();
+                transformStack.push(top.multiply(translateMat));
+            } else if (operator.equals("scale")) {
+                RealVector scaleVector = readVec3(commands, 1);
+                RealMatrix scaleMat = Transform
+                        .scale(scaleVector.getEntry(0), scaleVector.getEntry(1), scaleVector.getEntry(2));
+                RealMatrix top = transformStack.pop();
+                transformStack.push(top.multiply(scaleMat));
+            } else if (operator.equals("rotate")) {
+                RealVector axis = readVec3(commands, 2);
+                float degrees = Float.valueOf(commands[1]);
+                RealMatrix rotateMat4 = Transform.rotate(degrees, axis);
+                RealMatrix top = transformStack.pop();
+                transformStack.push(top.multiply(rotateMat4));
+            }
+
+            // I include the basic push/pop code for matrix stacks
+            else if (operator.equals("pushTransform")) {
+                transformStack.push(transformStack.peek());
+            } else if (operator.equals("popTransform")) {
+                transformStack.pop();
             }
         }
 
