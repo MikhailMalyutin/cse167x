@@ -36,7 +36,7 @@ public class RayTracer {
         Vector3D from3 = VectorUtils.toVector3D(cam.getFrom());
         Vector3D up3 = VectorUtils.toVector3D(cam.getUp());
         Vector3D to3 = VectorUtils.toVector3D(cam.getTo());
-        Vector3D w = up3.subtract(to3).normalize();
+        Vector3D w = from3.subtract(to3).normalize();
         Vector3D u = up3.crossProduct(w).normalize();
         Vector3D v = w.crossProduct(u);
 
@@ -55,7 +55,7 @@ public class RayTracer {
     private static Camera getCamera(Model model) {
         Camera result = new Camera();
         result.setFrom(model.getFrom());
-        result.setTo(model.getFrom());
+        result.setTo(model.getTo());
         result.setUp(model.getUp());
         result.setFov(model.getFov());
         result.setWidth(model.getW());
