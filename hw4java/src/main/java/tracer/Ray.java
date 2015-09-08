@@ -13,4 +13,12 @@ public class Ray {
     public void setP0(RealVector p0) {
         this.p0 = p0;
     }
+
+    public void setP1(RealVector p1) {
+        this.p1 = p1;
+    }
+
+    public RealVector getP1() {
+        return p1;
+    }
 }
