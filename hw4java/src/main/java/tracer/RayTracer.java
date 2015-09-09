@@ -2,7 +2,9 @@ package tracer;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.linear.RealVector;
+import scene.DrawedObject;
 import scene.Model;
+import scene.TriangleObject;
 import utils.VectorUtils;
 
 import java.awt.image.BufferedImage;
@@ -27,8 +29,30 @@ public class RayTracer {
 
     private static Intersection intersect(Ray ray, Model model) {
         Intersection result = new Intersection();
+        for (DrawedObject obj : model.getObjects()) {
+            if (obj instanceof TriangleObject) {
+                Intersection intersection = getIntersection(ray, (TriangleObject) obj, model);
+            }
+
+        }
 
         return result;
+    }
+
+    private static Intersection getIntersection(Ray ray, TriangleObject obj, Model model) {
+        Vector3D p0 = VectorUtils.toVector3D(ray.getP0());
+        Vector3D p1 = VectorUtils.toVector3D(ray.getP1());
+        Vector3D a = VectorUtils.toVector3D(model.getVertices().get(obj.getVertices()[0]));
+        Vector3D b = VectorUtils.toVector3D(model.getVertices().get(obj.getVertices()[1]));
+        Vector3D c = VectorUtils.toVector3D(model.getVertices().get(obj.getVertices()[2]));
+        Vector3D n = (c.subtract(a)).crossProduct(b.subtract(a)).normalize();
+        double den = p1.dotProduct(n);
+        if (den != 0.0) {
+            double t = (a.dotProduct(n) - p0.dotProduct(n)) / den;
+            Vector3D p = p0.add(p1.scalarMultiply(t));
+            return new Intersection();
+        }
+        return null;
     }
 
     private static Ray rayThruPixel(Camera cam, int x, int y) {
