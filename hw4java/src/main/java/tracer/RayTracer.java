@@ -1,7 +1,7 @@
 package tracer;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.linear.*;
 import scene.DrawedObject;
 import scene.Model;
 import scene.TriangleObject;
@@ -50,6 +50,23 @@ public class RayTracer {
         if (den != 0.0) {
             double t = (a.dotProduct(n) - p0.dotProduct(n)) / den;
             Vector3D p = p0.add(p1.scalarMultiply(t));
+            Vector3D ac = a.subtract(c);
+            Vector3D bc = b.subtract(c);
+            Vector3D pc = p.subtract(c);
+            double[][] mat = {{ac.getX(), bc.getX()}, {ac.getY(), bc.getY()}};
+            double[] params = {pc.getX(), pc.getY()};
+            RealVector constants = new ArrayRealVector(params, false);
+            RealMatrix coefficients = new Array2DRowRealMatrix(mat);
+            DecompositionSolver solver = new LUDecomposition(coefficients).getSolver();
+            RealVector solution = solver.solve(constants);
+            double alpfa = solution.getEntry(0);
+            double beta = solution.getEntry(1);
+            boolean match = false;
+            if (alpfa >=0 && beta >=0) {
+                match = true;
+            } else {
+                match = false;
+            }
             return new Intersection();
         }
         return null;
