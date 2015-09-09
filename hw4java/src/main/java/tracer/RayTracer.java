@@ -24,14 +24,18 @@ public class RayTracer {
     }
 
     private static int findColor(Intersection hit) {
+        if (hit.isMatch()) {
+            return 128 * 16 * 16 + 64;
+        }
         return 255 * 16 * 16 + 128;
     }
 
     private static Intersection intersect(Ray ray, Model model) {
-        Intersection result = new Intersection();
+        Intersection result = new Intersection(false);
         for (DrawedObject obj : model.getObjects()) {
             if (obj instanceof TriangleObject) {
                 Intersection intersection = getIntersection(ray, (TriangleObject) obj, model);
+                return intersection;
             }
 
         }
@@ -67,9 +71,9 @@ public class RayTracer {
             } else {
                 match = false;
             }
-            return new Intersection();
+            return new Intersection(match);
         }
-        return null;
+        return new Intersection(false);
     }
 
     private static Ray rayThruPixel(Camera cam, int x, int y) {
