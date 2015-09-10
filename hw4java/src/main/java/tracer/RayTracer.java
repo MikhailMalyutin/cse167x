@@ -9,19 +9,24 @@ import utils.VectorUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.Date;
+import java.util.stream.Stream;
 
 public class RayTracer {
     public static BufferedImage render(Model model) {
         Camera cam = getCamera(model);
         BufferedImage result = new BufferedImage(model.getW(), model.getH(), BufferedImage.TYPE_INT_RGB);
+        Stream<Integer> xs = Stream.iterate(0, n -> n + 1).limit(model.getW()).parallel();
         Date startTime = new Date();
-        for (int x = 0; x < model.getW(); ++x) {
-            for (int y = 0; y < model.getH(); ++y) {
+        xs.forEach(x ->
+        {
+            Stream<Integer> ys = Stream.iterate(0, n -> n + 1).limit(model.getH());
+            ys.forEach(y -> {
                 Ray ray = rayThruPixel(cam, x, y);
                 Intersection hit = intersect(ray, model);
                 result.setRGB(x, y, findColor(hit));
-            }
-        }
+            });
+        });
+
         Date endTime = new Date();
         final float time = endTime.getTime() - startTime.getTime();
         System.out.println("Executing time: " + time/1000);
