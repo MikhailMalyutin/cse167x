@@ -40,7 +40,7 @@ public class SceneParser {
                 DrawedObject drawed;
                 if (operator.equals("tri")) {
                     int[] vertices = readInt(commands, 1, 3);
-                    drawed = new TriangleObject(vertices);
+                    drawed = new TriangleObject(vertices, result);
                 } else {//operator.equals("sphere")
                     RealVector center = readVec4(commands, 1);
                     float radius = Float.valueOf(commands[4]);

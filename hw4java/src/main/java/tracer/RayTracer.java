@@ -68,10 +68,10 @@ public class RayTracer {
     private static Intersection getIntersection(Ray ray, TriangleObject obj, Model model) {
         Vector3D p0 = VectorUtils.toVector3D(ray.getP0());
         Vector3D p1 = VectorUtils.toVector3D(ray.getP1());
-        Vector3D a = VectorUtils.toVector3D(model.getVertices().get(obj.getVertices()[0]));
-        Vector3D b = VectorUtils.toVector3D(model.getVertices().get(obj.getVertices()[1]));
-        Vector3D c = VectorUtils.toVector3D(model.getVertices().get(obj.getVertices()[2]));
-        Vector3D n = (c.subtract(a)).crossProduct(b.subtract(a)).normalize();
+        Vector3D a = obj.getA();
+        Vector3D b = obj.getB();
+        Vector3D c = obj.getC();
+        Vector3D n = obj.getN();
         double den = p1.dotProduct(n);
         if (den != 0.0) {
             double t = (a.dotProduct(n) - p0.dotProduct(n)) / den;
@@ -79,14 +79,10 @@ public class RayTracer {
                 return  new Intersection(false);
             }
             Vector3D p = p0.add(p1.scalarMultiply(t));
-            Vector3D ac = a.subtract(c);
-            Vector3D bc = b.subtract(c);
             Vector3D pc = p.subtract(c);
-            double[][] mat = {{ac.getX(), bc.getX()}, {ac.getY(), bc.getY()}};
             double[] params = {pc.getX(), pc.getY()};
             RealVector constants = new ArrayRealVector(params, false);
-            RealMatrix coefficients = new Array2DRowRealMatrix(mat);
-            DecompositionSolver solver = new LUDecomposition(coefficients).getSolver();
+            DecompositionSolver solver = obj.getSolver();
             RealVector solution = solver.solve(constants);
             double alpfa = solution.getEntry(0);
             double beta = solution.getEntry(1);
