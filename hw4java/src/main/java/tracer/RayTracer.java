@@ -25,9 +25,19 @@ public class RayTracer {
 
     private static int findColor(Intersection hit) {
         if (hit.isMatch()) {
-            return 128 * 16 * 16 + 64;
+            return toColour(hit.getAmbient());
         }
         return 0;
+    }
+
+    private static int toColour(RealVector ambient) {
+        final double r = 1.0;//ambient.getEntry(0);
+        final double g = 1.0;//ambient.getEntry(1);
+        final double b = 1.0;//ambient.getEntry(2);
+        int rc = 256 * 256 * (int)(255. * r);
+        int rg = 256 * (int)(255. * g);
+        int rb = (int)(255. * b);
+        return rc + rg + rb;
     }
 
     private static Intersection intersect(Ray ray, Model model) {
@@ -76,7 +86,9 @@ public class RayTracer {
             } else {
                 match = false;
             }
-            return new Intersection(match);
+            final Intersection intersection = new Intersection(match);
+            intersection.setAmbient(obj.getAmbient());
+            return intersection;
         }
         return new Intersection(false);
     }
