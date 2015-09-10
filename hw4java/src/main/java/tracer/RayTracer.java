@@ -9,17 +9,18 @@ import utils.VectorUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.Date;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class RayTracer {
     public static BufferedImage render(Model model) {
         Camera cam = getCamera(model);
         BufferedImage result = new BufferedImage(model.getW(), model.getH(), BufferedImage.TYPE_INT_RGB);
-        Stream<Integer> xs = Stream.iterate(0, n -> n + 1).limit(model.getW()).parallel();
+        IntStream xs = IntStream.range(0, model.getW());
         Date startTime = new Date();
         xs.forEach(x ->
         {
-            Stream<Integer> ys = Stream.iterate(0, n -> n + 1).limit(model.getH());
+            IntStream ys = IntStream.range(0, model.getH());
             ys.forEach(y -> {
                 Ray ray = rayThruPixel(cam, x, y);
                 Intersection hit = intersect(ray, model);
