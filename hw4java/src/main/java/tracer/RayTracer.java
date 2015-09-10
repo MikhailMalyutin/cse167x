@@ -55,6 +55,9 @@ public class RayTracer {
         double den = p1.dotProduct(n);
         if (den != 0.0) {
             double t = (a.dotProduct(n) - p0.dotProduct(n)) / den;
+            if (t < 0) {
+                return  new Intersection(false);
+            }
             Vector3D p = p0.add(p1.scalarMultiply(t));
             Vector3D ac = a.subtract(c);
             Vector3D bc = b.subtract(c);
@@ -68,7 +71,7 @@ public class RayTracer {
             double alpfa = solution.getEntry(0);
             double beta = solution.getEntry(1);
             boolean match = false;
-            if (alpfa >=0 && beta >=0) {
+            if (alpfa >=0 && beta >=0 && alpfa + beta < 1.0) {
                 match = true;
             } else {
                 match = false;
@@ -89,8 +92,10 @@ public class RayTracer {
 
         final int halfW = cam.getWidth() / 2;
         final int halfH = cam.getHeight() / 2;
-        double alpha = Math.tan(Math.toRadians(cam.getFov() / 2)) * (x - halfW) / halfW;
-        double beta = Math.tan(Math.toRadians(cam.getFov() / 2)) * (halfH - y) / halfH;
+        final float fovY = cam.getFov();// / halfW * halfH;
+        final float fovX = fovY * halfW / halfH;;
+        double alpha = Math.tan(Math.toRadians(fovX / 2)) * (x - halfW) / halfW;
+        double beta = Math.tan(Math.toRadians(fovY / 2)) * (halfH - y) / halfH;
         Vector3D p13 = u.scalarMultiply(alpha).add(v.scalarMultiply(beta)).subtract(w);
 
         result.setP0(cam.getFrom());
