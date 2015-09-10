@@ -27,7 +27,7 @@ public class RayTracer {
         if (hit.isMatch()) {
             return 128 * 16 * 16 + 64;
         }
-        return 255 * 16 * 16 + 128;
+        return 0;
     }
 
     private static Intersection intersect(Ray ray, Model model) {
