@@ -35,7 +35,9 @@ public class RayTracer {
         for (DrawedObject obj : model.getObjects()) {
             if (obj instanceof TriangleObject) {
                 Intersection intersection = getIntersection(ray, (TriangleObject) obj, model);
-                return intersection;
+                if (intersection.isMatch()) {
+                    return intersection;
+                }
             }
 
         }
