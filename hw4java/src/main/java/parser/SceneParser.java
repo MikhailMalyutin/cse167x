@@ -4,10 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
-import scene.DrawedObject;
-import scene.Model;
-import scene.SphereObject;
-import scene.TriangleObject;
+import scene.*;
 import transform.MatrixUtils;
 import transform.Transform;
 
@@ -34,6 +31,20 @@ public class SceneParser {
             if (operator.equals("size")) {
                 result.setW(Integer.parseInt(commands[1]));
                 result.setH(Integer.parseInt(commands[2]));
+            } else if (operator.equals("directional")) {
+                final RealVector direction3 = readVec3(commands, 1);
+                RealVector direction = toVector4(direction3, 0.0);
+                final Lignt light = new Lignt();
+                light.setLightpos(direction);
+                light.setLightcolor(readVec3(commands, 4));
+                result.getLights().add(light);
+            } else if (operator.equals("point")) {
+                final RealVector point3 = readVec3(commands, 1);
+                RealVector point = toVector4(point3, 1.0);
+                final Lignt light = new Lignt();
+                light.setLightpos(point);
+                light.setLightcolor(readVec3(commands, 4));
+                result.getLights().add(light);
             } else if (operator.equals("vertex")) {
                 result.getVertices().add(readVec4(commands, 1));
             } else if (operator.equals("tri") || operator.equals("sphere")) {
@@ -100,6 +111,15 @@ public class SceneParser {
         }
 
         return result;
+    }
+
+    private static RealVector toVector4(RealVector point3, double last) {
+        double[] result = new double[4];
+        for (int i=0; i<3; ++i) {
+            result[i] = point3.getEntry(i);
+        }
+        result[3] = last;
+        return new ArrayRealVector(result);
     }
 
     private static RealVector readVec3(String[] commands, int startIndex) {

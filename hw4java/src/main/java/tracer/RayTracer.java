@@ -24,7 +24,7 @@ public class RayTracer {
             ys.forEach(y -> {
                 Ray ray = rayThruPixel(cam, x, y);
                 Intersection hit = intersect(ray, model);
-                result.setRGB(x, y, findColor(hit));
+                result.setRGB(x, y, findColor(hit, model));
             });
         });
 
@@ -34,8 +34,9 @@ public class RayTracer {
         return result;
     }
 
-    private static int findColor(Intersection hit) {
+    private static int findColor(Intersection hit, Model model) {
         if (hit.isMatch()) {
+            model.getLights();
             return toColour(hit.getObject().getAmbient());
         }
         return 0;

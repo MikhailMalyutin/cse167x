@@ -25,8 +25,7 @@ public class Model {
 //
 //// Lighting parameter array, similar to that in the fragment shader
 //    final int numLights = 10 ;
-//    GLfloat lightposn [4*numLights] ; // Light Positions
-//    GLfloat lightcolor[4*numLights] ; // Light Colors
+      List<Lignt> lights= new ArrayList<>(); // Light Positions
 //    GLfloat lightransf[4*numLights] ; // Lights transformed by modelview
 //    int numused ;                     // How many lights are used
 //
@@ -78,6 +77,14 @@ public class Model {
 
     public void setObjects(List<DrawedObject> objects) {
         this.objects = objects;
+    }
+
+    public List<Lignt> getLights() {
+        return lights;
+    }
+
+    public void setLights(List<Lignt> lights) {
+        this.lights = lights;
     }
 
     public int getMaxdepth() {
