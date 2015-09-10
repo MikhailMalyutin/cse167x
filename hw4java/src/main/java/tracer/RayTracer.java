@@ -8,11 +8,13 @@ import scene.TriangleObject;
 import utils.VectorUtils;
 
 import java.awt.image.BufferedImage;
+import java.util.Date;
 
 public class RayTracer {
     public static BufferedImage render(Model model) {
         Camera cam = getCamera(model);
         BufferedImage result = new BufferedImage(model.getW(), model.getH(), BufferedImage.TYPE_INT_RGB);
+        Date startTime = new Date();
         for (int x = 0; x < model.getW(); ++x) {
             for (int y = 0; y < model.getH(); ++y) {
                 Ray ray = rayThruPixel(cam, x, y);
@@ -20,6 +22,9 @@ public class RayTracer {
                 result.setRGB(x, y, findColor(hit));
             }
         }
+        Date endTime = new Date();
+        final float time = endTime.getTime() - startTime.getTime();
+        System.out.println("Executing time: " + time/1000);
         return result;
     }
 
