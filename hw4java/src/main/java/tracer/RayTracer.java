@@ -36,7 +36,7 @@ public class RayTracer {
 
     private static int findColor(Intersection hit) {
         if (hit.isMatch()) {
-            return toColour(hit.getAmbient());
+            return toColour(hit.getObject().getAmbient());
         }
         return 0;
     }
@@ -88,13 +88,14 @@ public class RayTracer {
             double alpfa = solution.getEntry(0);
             double beta = solution.getEntry(1);
             boolean match = false;
-            if (alpfa >=0 && beta >=0 && alpfa + beta < 1.0) {
+            if (alpfa >=0 && beta >=0 && alpfa + beta <= 1.0) {
                 match = true;
             } else {
                 match = false;
             }
             final Intersection intersection = new Intersection(match);
-            intersection.setAmbient(obj.getAmbient());
+            intersection.setObject(obj);
+            intersection.setP(p);
             return intersection;
         }
         return new Intersection(false);
