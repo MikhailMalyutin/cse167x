@@ -29,7 +29,7 @@ public class SceneParser {
         transformStack.push(MatrixUtils.getIdentity());
 
         for (String line : lines) {
-            String[] commands = line.split(" ");
+            String[] commands = line.trim().split(" ");
             final String operator = commands[0].trim();
             if (operator.equals("size")) {
                 result.setW(Integer.parseInt(commands[1]));
