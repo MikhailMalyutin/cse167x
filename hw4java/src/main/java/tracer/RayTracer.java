@@ -104,20 +104,11 @@ public class RayTracer {
 
     private static Ray rayThruPixel(Camera cam, int x, int y) {
         Ray result = new Ray();
-        Vector3D from3 = VectorUtils.toVector3D(cam.getFrom());
-        Vector3D up3 = VectorUtils.toVector3D(cam.getUp());
-        Vector3D to3 = VectorUtils.toVector3D(cam.getTo());
-        Vector3D w = from3.subtract(to3).normalize();
-        Vector3D u = up3.crossProduct(w).normalize();
-        Vector3D v = w.crossProduct(u);
-
-        final int halfW = cam.getWidth() / 2;
-        final int halfH = cam.getHeight() / 2;
-        final float fovY = cam.getFov();// / halfW * halfH;
-        final float fovX = fovY * halfW / halfH;;
-        double alpha = Math.tan(Math.toRadians(fovX / 2)) * (x - halfW) / halfW;
-        double beta = Math.tan(Math.toRadians(fovY / 2)) * (halfH - y) / halfH;
-        Vector3D p13 = u.scalarMultiply(alpha).add(v.scalarMultiply(beta)).subtract(w);
+        final int halfW = cam.getHalfW();
+        double alpha = Math.tan(Math.toRadians(cam.getFovX() / 2)) * (x - halfW) / halfW;
+        final int halfH = cam.getHalfH();
+        double beta = cam.getTanHalfFovY() * (halfH - y) / halfH;
+        Vector3D p13 = cam.getU().scalarMultiply(alpha).add(cam.getV().scalarMultiply(beta)).subtract(cam.getW());
 
         result.setP0(cam.getFrom());
         result.setP1(VectorUtils.toRealVector(p13));
@@ -133,6 +124,7 @@ public class RayTracer {
         result.setFov(model.getFov());
         result.setWidth(model.getW());
         result.setHeight(model.getH());
+        result.init();
         return result;
     }
 }

@@ -32,4 +32,8 @@ public class Intersection {
     public Vector3D getP() {
         return p;
     }
+
+    public Vector3D getN() {
+        return object.getN();
+    }
 }
