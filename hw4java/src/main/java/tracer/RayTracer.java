@@ -3,6 +3,7 @@ package tracer;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.linear.*;
 import scene.DrawedObject;
+import scene.LightCalculations;
 import scene.Model;
 import scene.TriangleObject;
 import utils.VectorUtils;
@@ -24,7 +25,7 @@ public class RayTracer {
             ys.forEach(y -> {
                 Ray ray = rayThruPixel(cam, x, y);
                 Intersection hit = intersect(ray, model);
-                result.setRGB(x, y, findColor(hit, model));
+                result.setRGB(x, y, findColor(hit, cam, model));
             });
         });
 
@@ -34,18 +35,18 @@ public class RayTracer {
         return result;
     }
 
-    private static int findColor(Intersection hit, Model model) {
+    private static int findColor(Intersection hit, Camera cam, Model model) {
         if (hit.isMatch()) {
-            model.getLights();
-            return toColour(hit.getObject().getAmbient());
+            RealVector light = LightCalculations.computeLight(model, cam, hit);
+            return toColour(light);
         }
         return 0;
     }
 
     private static int toColour(RealVector ambient) {
-        final double r = 1.0;//ambient.getEntry(0);
-        final double g = 1.0;//ambient.getEntry(1);
-        final double b = 1.0;//ambient.getEntry(2);
+        final double r = ambient.getEntry(0);
+        final double g = ambient.getEntry(1);
+        final double b = ambient.getEntry(2);
         int rc = 256 * 256 * (int)(255. * r);
         int rg = 256 * (int)(255. * g);
         int rb = (int)(255. * b);

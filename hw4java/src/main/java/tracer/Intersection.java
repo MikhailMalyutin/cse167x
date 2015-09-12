@@ -34,6 +34,6 @@ public class Intersection {
     }
 
     public Vector3D getN() {
-        return object.getN();
+        return object.getN().scalarMultiply(-1.0);
     }
 }
