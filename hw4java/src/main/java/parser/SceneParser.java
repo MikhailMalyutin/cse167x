@@ -87,19 +87,19 @@ public class SceneParser {
                 RealVector transformVec = readVec3(commands, 1);
                 RealMatrix translateMat = Transform.translate(transformVec);
                 RealMatrix top = transformStack.pop();
-                transformStack.push(top.multiply(translateMat));
+                transformStack.push(translateMat.multiply(top));
             } else if (operator.equals("scale")) {
                 RealVector scaleVector = readVec3(commands, 1);
                 RealMatrix scaleMat = Transform
                         .scale(scaleVector.getEntry(0), scaleVector.getEntry(1), scaleVector.getEntry(2));
                 RealMatrix top = transformStack.pop();
-                transformStack.push(top.multiply(scaleMat));
+                transformStack.push(scaleMat.multiply(top));
             } else if (operator.equals("rotate")) {
                 RealVector axis = readVec3(commands, 2);
                 float degrees = Float.valueOf(commands[1]);
                 RealMatrix rotateMat4 = Transform.rotate(degrees, axis);
                 RealMatrix top = transformStack.pop();
-                transformStack.push(top.multiply(rotateMat4));
+                transformStack.push(rotateMat4.multiply(top));
             }
 
             // I include the basic push/pop code for matrix stacks
