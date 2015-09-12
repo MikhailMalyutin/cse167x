@@ -2,12 +2,13 @@ package scene;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.linear.*;
-import tracer.Intersection;
 import utils.VectorUtils;
 
 public class TriangleObject extends DrawedObject {
     private int[] vertices = new int[3];
-    private DecompositionSolver solver;
+    private DecompositionSolver solverXY;
+    private DecompositionSolver solverXZ;
+    private DecompositionSolver solverYZ;
     private Vector3D a;
     private Vector3D b;
     private Vector3D c;
@@ -29,13 +30,27 @@ public class TriangleObject extends DrawedObject {
         n = (c.subtract(a)).crossProduct(b.subtract(a)).normalize();
         Vector3D ac = a.subtract(c);
         Vector3D bc = b.subtract(c);
-        double[][] mat = {{ac.getX(), bc.getX()}, {ac.getY(), bc.getY()}};
-        RealMatrix coefficients = new Array2DRowRealMatrix(mat);
-        solver = new LUDecomposition(coefficients).getSolver();
+        double[][] matXY = {{ac.getX(), bc.getX()}, {ac.getY(), bc.getY()}};
+        double[][] matXZ = {{ac.getX(), bc.getX()}, {ac.getZ(), bc.getZ()}};
+        double[][] matYZ = {{ac.getY(), bc.getY()}, {ac.getZ(), bc.getZ()}};
+        RealMatrix coefficientsXY = new Array2DRowRealMatrix(matXY);
+        RealMatrix coefficientsXZ = new Array2DRowRealMatrix(matXZ);
+        RealMatrix coefficientsYZ = new Array2DRowRealMatrix(matYZ);
+        solverXY = new LUDecomposition(coefficientsXY).getSolver();
+        solverXZ = new LUDecomposition(coefficientsXZ).getSolver();
+        solverYZ = new LUDecomposition(coefficientsYZ).getSolver();
     }
 
-    public DecompositionSolver getSolver() {
-        return solver;
+    public DecompositionSolver getSolverXY() {
+        return solverXY;
+    }
+
+    public DecompositionSolver getSolverXZ() {
+        return solverXZ;
+    }
+
+    public DecompositionSolver getSolverYZ() {
+        return solverYZ;
     }
 
     public Vector3D getA() {
