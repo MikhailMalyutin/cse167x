@@ -54,7 +54,7 @@ public class SceneParser {
                     drawed = new TriangleObject(vertices, result);
                 } else {//operator.equals("sphere")
                     RealVector center = readVec3(commands, 1);
-                    float radius = Float.valueOf(commands[3]);
+                    float radius = Float.valueOf(commands[4]);
                     drawed = new SphereObject(radius, center);
                 }
                 drawed.setAmbient(ambient);
