@@ -2,11 +2,14 @@ package tracer;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.linear.RealVector;
+import scene.DrawedObject;
+import scene.SphereObject;
 import scene.TriangleObject;
+import utils.VectorUtils;
 
 public class Intersection {
     private boolean match;
-    private TriangleObject object;
+    private DrawedObject object;
     private Vector3D p;
     private double distance = Double.MAX_VALUE;
 
@@ -18,11 +21,11 @@ public class Intersection {
         return match;
     }
 
-    public void setObject(TriangleObject object) {
+    public void setObject(DrawedObject object) {
         this.object = object;
     }
 
-    public TriangleObject getObject() {
+    public DrawedObject getObject() {
         return object;
     }
 
@@ -35,7 +38,14 @@ public class Intersection {
     }
 
     public Vector3D getN() {
-        return object.getN().scalarMultiply(-1.0);
+        if (object instanceof TriangleObject) {
+            return ((TriangleObject)object).getN().scalarMultiply(-1.0);
+        }
+        if (object instanceof SphereObject) {
+            SphereObject casted = (SphereObject) object;
+            return p.subtract(VectorUtils.toVector3D(casted.getCenter())).scalarMultiply(-1.0);
+        }
+        return null;
     }
 
     public void setDistance(double distance) {

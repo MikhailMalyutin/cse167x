@@ -2,10 +2,7 @@ package tracer;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.linear.*;
-import scene.DrawedObject;
-import scene.LightCalculations;
-import scene.Model;
-import scene.TriangleObject;
+import scene.*;
 import utils.VectorUtils;
 
 import java.awt.image.BufferedImage;
@@ -60,11 +57,53 @@ public class RayTracer {
                 if (intersection.isMatch() && intersection.getDistance() < result.getDistance()) {
                     result = intersection;
                 }
+            } else if (obj instanceof SphereObject) {
+                Intersection intersection = getIntersection(ray, (SphereObject) obj, model);
+                if (intersection.isMatch() && intersection.getDistance() < result.getDistance()) {
+                    result = intersection;
+                }
             }
 
         }
 
         return result;
+    }
+
+    private static Intersection getIntersection(Ray ray, SphereObject obj, Model model) {
+        Vector3D c = VectorUtils.toVector3D(obj.getCenter());
+        Vector3D p0 = VectorUtils.toVector3D(ray.getP0());
+        Vector3D p1 = VectorUtils.toVector3D(ray.getP1());
+        float a = (float) p1.dotProduct(p1);
+        float b = (float) p1.dotProduct(p0.subtract(c));
+
+        Vector3D p0c = p0.subtract(c);
+        float cc = (float) (p0c.dotProduct(p0c) - obj.getSize() * obj.getSize());
+        Double t = quadraticEquationRoot1(a, b, cc);
+        if (t == null) {
+            return new Intersection(false);
+        }
+        Intersection result = new Intersection(true);
+        result.setObject(obj);
+        result.setDistance(t);
+        result.setP(p0.add(p1.scalarMultiply(t)));
+        return result;
+    }
+
+    public static Double quadraticEquationRoot1(double a, double b, double c){
+        double root1, root2; //This is now a double, too.
+        final double d = Math.pow(b, 2) - 4 * a * c;
+        if (d < 0) {
+            return null;
+        }
+        root1 = (-b + Math.sqrt(d)) / (2*a);
+        root2 = (-b - Math.sqrt(d)) / (2*a);
+        if (root2 > 0) {
+            return root2;
+        }
+        if (root1 > 0) {
+            return root1;
+        }
+        return null;
     }
 
     private static Intersection getIntersection(Ray ray, TriangleObject obj, Model model) {
