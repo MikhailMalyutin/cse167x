@@ -75,7 +75,7 @@ public class RayTracer {
         Vector3D p1 = VectorUtils.toVector3D(ray.getP1());
         float a = (float) p1.dotProduct(p1);
         Vector3D p0c = p0.subtract(c);
-        float b = (float) p1.dotProduct(p0c);
+        float b = (float) p1.dotProduct(p0c) * 2.0f;
 
         float cc = (float) (p0c.dotProduct(p0c)) - obj.getSize() * obj.getSize();
         Double t = quadraticEquationRoot1(a, b, cc);
@@ -91,7 +91,7 @@ public class RayTracer {
 
     public static Double quadraticEquationRoot1(double a, double b, double c){
         double root1, root2; //This is now a double, too.
-        final double d = Math.pow(b, 2) - 4 * a * c;
+        double d = Math.pow(b, 2) - 4 * a * c;
         if (d < 0) {
             return null;
         }
