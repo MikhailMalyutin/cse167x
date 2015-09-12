@@ -51,11 +51,11 @@ public class SceneParser {
                 DrawedObject drawed;
                 if (operator.equals("tri")) {
                     int[] vertices = readInt(commands, 1, 3);
-                    drawed = new TriangleObject(vertices, result);
+                    drawed = new TriangleObject(vertices, result, transformStack.peek());
                 } else {//operator.equals("sphere")
                     RealVector center = readVec3(commands, 1);
                     float radius = Float.valueOf(commands[4]);
-                    drawed = new SphereObject(radius, center);
+                    drawed = new SphereObject(radius, center, transformStack.peek());
                 }
                 drawed.setAmbient(ambient);
                 drawed.setDiffuse(diffuse);

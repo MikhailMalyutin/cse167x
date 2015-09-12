@@ -11,7 +11,7 @@ import static tracer.RayTracer.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        String fileName = "j:\\Work\\Learn\\cse167x1\\testscenes\\scene2.test";
+        String fileName = "j:\\Work\\Learn\\cse167x1\\testscenes\\scene3.test";
         Model model = SceneParser.parse(new File(fileName));
         BufferedImage image = render(model);
         File outFileName = new File("j:\\Work\\Learn\\cse167x1\\testscenes\\out.png");
