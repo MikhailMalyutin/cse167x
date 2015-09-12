@@ -11,7 +11,6 @@ import utils.VectorUtils;
 import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class RayTracer {
     public static BufferedImage render(Model model) {
@@ -31,7 +30,7 @@ public class RayTracer {
 
         Date endTime = new Date();
         final float time = endTime.getTime() - startTime.getTime();
-        System.out.println("Executing time: " + time/1000);
+        System.out.println("Executing time: " + time / 1000);
         return result;
     }
 
@@ -47,9 +46,9 @@ public class RayTracer {
         final double r = ambient.getEntry(0);
         final double g = ambient.getEntry(1);
         final double b = ambient.getEntry(2);
-        int rc = 256 * 256 * (int)(255. * r);
-        int rg = 256 * (int)(255. * g);
-        int rb = (int)(255. * b);
+        int rc = 256 * 256 * (int) (255. * r);
+        int rg = 256 * (int) (255. * g);
+        int rb = (int) (255. * b);
         return rc + rg + rb;
     }
 
@@ -79,32 +78,53 @@ public class RayTracer {
         if (den != 0.0) {
             double t = (a.dotProduct(n) - p0.dotProduct(n)) / den;
             if (t < 0) {
-                return  new Intersection(false);
+                return new Intersection(false);
             }
             Vector3D p = p0.add(p1.scalarMultiply(t));
             Vector3D pc = p.subtract(c);
-            double[] params = {pc.getX(), pc.getY()};
-            RealVector constants = new ArrayRealVector(params, false);
-            DecompositionSolver solver = obj.getSolver();
-            try {
-                RealVector solution = solver.solve(constants);
-                double alpfa = solution.getEntry(0);
-                double beta = solution.getEntry(1);
-                boolean match = false;
-                if (alpfa >= 0 && beta >= 0 && alpfa + beta <= 1.0) {
-                    match = true;
-                } else {
-                    match = false;
-                }
-                final Intersection intersection = new Intersection(match);
-                intersection.setObject(obj);
-                intersection.setP(p);
-                return intersection;
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            final Intersection intersection = getIntersection(obj, p, pc);
+            if (intersection != null) return intersection;
         }
         return new Intersection(false);
+    }
+
+    private static Intersection getIntersection(TriangleObject obj, Vector3D p, Vector3D pc) {
+        DecompositionSolver solver = obj.getSolverXY();
+        try {
+            double[] params = {pc.getX(), pc.getY()};
+            return getIntersection(obj, solver, p, pc, params);
+        } catch (Exception ex) {
+            solver = obj.getSolverYZ();
+            try {
+                double[] params = {pc.getY(), pc.getZ()};
+                return getIntersection(obj, solver, p, pc, params);
+            } catch (Exception e) {
+                solver = obj.getSolverXZ();
+                double[] params = {pc.getX(), pc.getZ()};
+                return getIntersection(obj, solver, p, pc, params);
+            }
+        }
+    }
+
+    private static Intersection getIntersection(TriangleObject obj,
+                                                DecompositionSolver solver,
+                                                Vector3D p,
+                                                Vector3D pc,
+                                                double[] params) {
+        RealVector constants = new ArrayRealVector(params, false);
+        RealVector solution = solver.solve(constants);
+        double alpfa = solution.getEntry(0);
+        double beta = solution.getEntry(1);
+        boolean match = false;
+        if (alpfa >= 0 && beta >= 0 && alpfa + beta <= 1.0) {
+            match = true;
+        } else {
+            match = false;
+        }
+        final Intersection intersection = new Intersection(match);
+        intersection.setObject(obj);
+        intersection.setP(p);
+        return intersection;
     }
 
     private static Ray rayThruPixel(Camera cam, int x, int y) {
