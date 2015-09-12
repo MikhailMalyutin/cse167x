@@ -16,7 +16,7 @@ public class RayTracer {
     public static BufferedImage render(Model model) {
         Camera cam = getCamera(model);
         BufferedImage result = new BufferedImage(model.getW(), model.getH(), BufferedImage.TYPE_INT_RGB);
-        IntStream xs = IntStream.range(0, model.getW());
+        IntStream xs = IntStream.range(0, model.getW()).parallel();
         Date startTime = new Date();
         xs.forEach(x ->
         {
