@@ -1,5 +1,6 @@
 package scene;
 
+import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
@@ -11,6 +12,7 @@ public abstract class DrawedObject {
     private RealVector emission;
     private float shininess;
     private RealMatrix transform;
+    private RealMatrix transformInverse;
 
     public RealVector getAmbient() {
         return ambient;
@@ -58,5 +60,10 @@ public abstract class DrawedObject {
 
     public void setTransform(RealMatrix transform) {
         this.transform = transform;
+        this.transformInverse = MatrixUtils.inverse(transform);
+    }
+
+    public RealMatrix getTransformInverse() {
+        return transformInverse;
     }
 }

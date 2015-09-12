@@ -15,8 +15,8 @@ public class SphereObject extends DrawedObject {
         Vector3D c3d = VectorUtils.toVector3D(center);
         RealVector homegenous = VectorUtils.toRealVector(c3d);
         homegenous.setEntry(3, 1.0);
-        final RealVector transformed = transform.preMultiply(homegenous);
-        this.center = transformed;
+        //final RealVector transformed = transform.preMultiply(homegenous);
+        this.center = center;
     }
 
     public float getSize() {
