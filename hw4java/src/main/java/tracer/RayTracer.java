@@ -74,10 +74,10 @@ public class RayTracer {
         Vector3D p0 = VectorUtils.toVector3D(ray.getP0());
         Vector3D p1 = VectorUtils.toVector3D(ray.getP1());
         float a = (float) p1.dotProduct(p1);
-        float b = (float) p1.dotProduct(p0.subtract(c));
-
         Vector3D p0c = p0.subtract(c);
-        float cc = (float) (p0c.dotProduct(p0c) - obj.getSize() * obj.getSize());
+        float b = (float) p1.dotProduct(p0c);
+
+        float cc = (float) (p0c.dotProduct(p0c)) - obj.getSize() * obj.getSize();
         Double t = quadraticEquationRoot1(a, b, cc);
         if (t == null) {
             return new Intersection(false);
