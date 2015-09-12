@@ -1,5 +1,6 @@
 package tracer;
 
+import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
 public class Ray {
@@ -20,5 +21,12 @@ public class Ray {
 
     public RealVector getP1() {
         return p1;
+    }
+
+    public Ray transform(RealMatrix transform) {
+        Ray result = new Ray();
+        result.setP0(transform.preMultiply(p0));
+        result.setP1(transform.preMultiply(p1));
+        return result;
     }
 }
