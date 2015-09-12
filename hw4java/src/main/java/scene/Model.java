@@ -25,7 +25,7 @@ public class Model {
 //
 //// Lighting parameter array, similar to that in the fragment shader
 //    final int numLights = 10 ;
-      List<Lignt> lights= new ArrayList<>(); // Light Positions
+      List<Light> lights= new ArrayList<>(); // Light Positions
 //    GLfloat lightransf[4*numLights] ; // Lights transformed by modelview
 //    int numused ;                     // How many lights are used
 //
@@ -79,11 +79,11 @@ public class Model {
         this.objects = objects;
     }
 
-    public List<Lignt> getLights() {
+    public List<Light> getLights() {
         return lights;
     }
 
-    public void setLights(List<Lignt> lights) {
+    public void setLights(List<Light> lights) {
         this.lights = lights;
     }
 

@@ -3,7 +3,7 @@ package scene;
 import org.apache.commons.math3.linear.RealVector;
 
 
-public class Lignt {
+public class Light {
     private RealVector lightpos; // Light Positions
     private RealVector lightcolor; // Light Colors
 

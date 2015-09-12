@@ -34,14 +34,14 @@ public class SceneParser {
             } else if (operator.equals("directional")) {
                 final RealVector direction3 = readVec3(commands, 1);
                 RealVector direction = toVector4(direction3, 0.0);
-                final Lignt light = new Lignt();
+                final Light light = new Light();
                 light.setLightpos(direction);
                 light.setLightcolor(readVec3(commands, 4));
                 result.getLights().add(light);
             } else if (operator.equals("point")) {
                 final RealVector point3 = readVec3(commands, 1);
                 RealVector point = toVector4(point3, 1.0);
-                final Lignt light = new Lignt();
+                final Light light = new Light();
                 light.setLightpos(point);
                 light.setLightcolor(readVec3(commands, 4));
                 result.getLights().add(light);

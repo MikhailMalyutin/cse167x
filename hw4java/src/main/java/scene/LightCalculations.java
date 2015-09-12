@@ -7,7 +7,19 @@ import tracer.Intersection;
 import utils.VectorUtils;
 
 public class LightCalculations {
-    public static RealVector ComputeLight(Vector3D direction,
+    public static RealVector computeLight(Model model, Camera camera, Intersection intersection) {
+        RealVector finalcolor;
+
+        finalcolor = intersection.getObject().getAmbient();
+
+        for (Light light : model.getLights()) {
+            finalcolor = finalcolor.add(calculatePosLight(light, camera, intersection));
+        }
+
+        return finalcolor;
+    }
+
+    private static RealVector computeLight(Vector3D direction,
                                           RealVector lightcolor,
                                           Vector3D normal,
                                           Vector3D halfvec,
@@ -25,8 +37,7 @@ public class LightCalculations {
         return retval;
     }
 
-    RealVector calculatePosLight(Lignt light, Camera camera, Intersection intersection)
-    {
+    private static RealVector calculatePosLight(Light light, Camera camera, Intersection intersection) {
         Vector3D mypos = camera.getFrom3(); // Dehomogenize current location
         Vector3D eyedirn = camera.getW();
 
@@ -46,7 +57,7 @@ public class LightCalculations {
         }
         Vector3D half1 = direction1.add(eyedirn).normalize();
         DrawedObject obj = intersection.getObject();
-        RealVector col1 = ComputeLight(direction1, light.getLightcolor(), normal,
+        RealVector col1 = computeLight(direction1, light.getLightcolor(), normal,
                 half1, obj.getDiffuse(), obj.getSpecular(), obj.getShininess()) ;
 
         return col1 ;
