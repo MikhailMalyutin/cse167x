@@ -8,6 +8,7 @@ public class Intersection {
     private boolean match;
     private TriangleObject object;
     private Vector3D p;
+    private double distance = Double.MAX_VALUE;
 
     public Intersection(boolean match) {
         this.match = match;
@@ -35,5 +36,13 @@ public class Intersection {
 
     public Vector3D getN() {
         return object.getN().scalarMultiply(-1.0);
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getDistance() {
+        return distance;
     }
 }

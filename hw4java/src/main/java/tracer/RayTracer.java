@@ -57,8 +57,8 @@ public class RayTracer {
         for (DrawedObject obj : model.getObjects()) {
             if (obj instanceof TriangleObject) {
                 Intersection intersection = getIntersection(ray, (TriangleObject) obj, model);
-                if (intersection.isMatch()) {
-                    return intersection;
+                if (intersection.isMatch() && intersection.getDistance() < result.getDistance()) {
+                    result = intersection;
                 }
             }
 
@@ -83,7 +83,10 @@ public class RayTracer {
             Vector3D p = p0.add(p1.scalarMultiply(t));
             Vector3D pc = p.subtract(c);
             final Intersection intersection = getIntersection(obj, p, pc);
-            if (intersection != null) return intersection;
+            if (intersection != null) {
+                intersection.setDistance(t);
+                return intersection;
+            }
         }
         return new Intersection(false);
     }
