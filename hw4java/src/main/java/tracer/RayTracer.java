@@ -86,19 +86,23 @@ public class RayTracer {
             double[] params = {pc.getX(), pc.getY()};
             RealVector constants = new ArrayRealVector(params, false);
             DecompositionSolver solver = obj.getSolver();
-            RealVector solution = solver.solve(constants);
-            double alpfa = solution.getEntry(0);
-            double beta = solution.getEntry(1);
-            boolean match = false;
-            if (alpfa >=0 && beta >=0 && alpfa + beta <= 1.0) {
-                match = true;
-            } else {
-                match = false;
+            try {
+                RealVector solution = solver.solve(constants);
+                double alpfa = solution.getEntry(0);
+                double beta = solution.getEntry(1);
+                boolean match = false;
+                if (alpfa >= 0 && beta >= 0 && alpfa + beta <= 1.0) {
+                    match = true;
+                } else {
+                    match = false;
+                }
+                final Intersection intersection = new Intersection(match);
+                intersection.setObject(obj);
+                intersection.setP(p);
+                return intersection;
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-            final Intersection intersection = new Intersection(match);
-            intersection.setObject(obj);
-            intersection.setP(p);
-            return intersection;
         }
         return new Intersection(false);
     }

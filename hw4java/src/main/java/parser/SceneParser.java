@@ -26,7 +26,7 @@ public class SceneParser {
         transformStack.push(MatrixUtils.getIdentity());
 
         for (String line : lines) {
-            String[] commands = line.trim().split(" ");
+            String[] commands = line.trim().split("\\s+");
             final String operator = commands[0].trim();
             if (operator.equals("size")) {
                 result.setW(Integer.parseInt(commands[1]));
@@ -53,8 +53,8 @@ public class SceneParser {
                     int[] vertices = readInt(commands, 1, 3);
                     drawed = new TriangleObject(vertices, result);
                 } else {//operator.equals("sphere")
-                    RealVector center = readVec4(commands, 1);
-                    float radius = Float.valueOf(commands[4]);
+                    RealVector center = readVec3(commands, 1);
+                    float radius = Float.valueOf(commands[3]);
                     drawed = new SphereObject(radius, center);
                 }
                 drawed.setAmbient(ambient);
