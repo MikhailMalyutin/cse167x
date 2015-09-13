@@ -95,8 +95,8 @@ public class SceneParser {
                 RealMatrix top = transformStack.pop();
                 transformStack.push(scaleMat.multiply(top));
             } else if (operator.equals("rotate")) {
-                RealVector axis = readVec3(commands, 2);
-                float degrees = Float.valueOf(commands[1]);
+                RealVector axis = readVec3(commands, 1);
+                float degrees = Float.valueOf(commands[4]);
                 RealMatrix rotateMat4 = Transform.rotate(degrees, axis);
                 RealMatrix top = transformStack.pop();
                 transformStack.push(rotateMat4.multiply(top));
