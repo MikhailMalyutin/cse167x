@@ -10,7 +10,10 @@ public class LightCalculations {
     public static RealVector computeLight(Model model, Camera camera, Intersection intersection) {
         RealVector finalcolor;
 
-        finalcolor = intersection.getObject().getAmbient();
+        final DrawedObject object = intersection.getObject();
+        finalcolor = object.getAmbient();
+        final RealVector emission = object.getEmission();
+        finalcolor = finalcolor.add(emission);
 
         for (Light light : model.getLights()) {
             finalcolor = finalcolor.add(calculatePosLight(light, camera, intersection));

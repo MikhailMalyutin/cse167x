@@ -17,10 +17,10 @@ public class SceneParser {
         String str = FileUtils.readFileToString(file);
         String[] lines = str.split("\n");
 
-        RealVector ambient = null;
-        RealVector diffuse = null;
-        RealVector specular = null;
-        RealVector emission = null;
+        RealVector ambient = new ArrayRealVector(3);
+        RealVector diffuse = new ArrayRealVector(3);
+        RealVector specular = new ArrayRealVector(3);
+        RealVector emission = new ArrayRealVector(3);
         float shininess = 0.0f;
         Stack<RealMatrix> transformStack = new Stack<>();
         transformStack.push(MatrixUtils.getIdentity());
@@ -79,7 +79,7 @@ public class SceneParser {
                 diffuse = readVec3(commands, 1);
             } else if (operator.equals("specular")) {
                 specular = readVec3(commands, 1);
-            } else if (operator.equals("emission ")) {
+            } else if (operator.equals("emission")) {
                 emission = readVec3(commands, 1);
             } else if (operator.equals("shininess")) {
                 shininess = Float.valueOf(commands[1]);
