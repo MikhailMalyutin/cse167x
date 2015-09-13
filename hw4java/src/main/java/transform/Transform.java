@@ -41,7 +41,7 @@ public class Transform {
                 {x, y, z},
                 {0.0, 0.0, 0.0},
                 {0.0, 0.0, 0.0}};
-        RealMatrix am = new Array2DRowRealMatrix(amV);
+        RealMatrix am = new Array2DRowRealMatrix(amV).transpose();
         RealMatrix I = MatrixUtils.getIdentity(3);
         RealMatrix res3 = I.scalarMultiply(Math.cos(theta))
                 .add(
