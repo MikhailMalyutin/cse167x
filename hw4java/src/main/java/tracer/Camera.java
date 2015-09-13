@@ -25,6 +25,7 @@ public class Camera {
     private float fovX;
 
     private double tanHalfFovY;
+    private double tanHalfFovX;
 
     public void init() {
         from3 = VectorUtils.toVector3D(getFrom());
@@ -37,8 +38,9 @@ public class Camera {
         halfW = getWidth() / 2;
         halfH = getHeight() / 2;
         fovY = getFov();// / halfW * halfH;
-        fovX = fovY * halfW / halfH;;
+        fovX = fovY * getWidth() / getHeight();
         tanHalfFovY = Math.tan(Math.toRadians(getFovY() / 2));
+        tanHalfFovX = tanHalfFovY * getWidth() / getHeight();
     }
 
     public void setFrom(RealVector from) {
@@ -175,5 +177,13 @@ public class Camera {
 
     public void setTanHalfFovY(double tanHalfFovY) {
         this.tanHalfFovY = tanHalfFovY;
+    }
+
+    public double getTanHalfFovX() {
+        return tanHalfFovX;
+    }
+
+    public void setTanHalfFovX(double tanHalfFovX) {
+        this.tanHalfFovX = tanHalfFovX;
     }
 }

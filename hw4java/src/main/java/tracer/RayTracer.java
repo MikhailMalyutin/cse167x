@@ -175,12 +175,14 @@ public class RayTracer {
         return intersection;
     }
 
-    private static Ray rayThruPixel(Camera cam, int x, int y) {
+    private static Ray rayThruPixel(Camera cam, int xi, int yi) {
         Ray result = new Ray();
+        float x = xi + .5f;
+        float y = yi + .5f;
         final int halfW = cam.getHalfW();
-        double alpha = Math.tan(Math.toRadians(cam.getFovX() / 2)) * (x - halfW) / halfW;
+        float alpha = (float) (cam.getTanHalfFovX()) * ((x - halfW) / halfW);
         final int halfH = cam.getHalfH();
-        double beta = cam.getTanHalfFovY() * (halfH - y) / halfH;
+        float beta = (float) (cam.getTanHalfFovY() * (halfH - y) / halfH);
         Vector3D p13 = cam.getU().scalarMultiply(alpha).add(cam.getV().scalarMultiply(beta)).subtract(cam.getW());
 
         result.setP0(cam.getFrom());
