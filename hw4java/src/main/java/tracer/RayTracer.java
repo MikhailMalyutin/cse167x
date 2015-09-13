@@ -70,6 +70,7 @@ public class RayTracer {
     }
 
     private static Intersection getIntersection(Ray ray, SphereObject obj, Model model) {
+        RealMatrix transform = obj.getTransform();
         ray = ray.transform(obj.getTransformInverse());
         Vector3D c = VectorUtils.toVector3D(obj.getCenter());
         Vector3D p0 = VectorUtils.toVector3D(ray.getP0());
@@ -85,9 +86,12 @@ public class RayTracer {
         }
         Intersection result = new Intersection(true);
         result.setObject(obj);
-        result.setDistance(t);
         final Vector3D p = p0.add(p1.scalarMultiply(t));
-        result.setP(p);
+        RealVector pv = VectorUtils.toRealVector(p);
+        pv.setEntry(3, 1.0);
+        RealVector pt = transform.preMultiply(pv);
+        result.setP(VectorUtils.toVector3D(pt));
+        result.setDistance(t);
         return result;
     }
 
