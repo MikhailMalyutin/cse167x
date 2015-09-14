@@ -41,7 +41,7 @@ public class LightCalculations {
     }
 
     private static RealVector calculatePosLight(Light light, Camera camera, Intersection intersection) {
-        Vector3D mypos = camera.getFrom3(); // Dehomogenize current location
+        Vector3D mypos = intersection.getP(); // Dehomogenize current location
         Vector3D eyedirn = camera.getW();
 
         // Compute normal, needed for shading.
