@@ -21,4 +21,13 @@ public class VectorUtils {
         result.setEntry(3, 0.0);
         return result;
     }
+
+    public static RealVector toRealVector4(RealVector center3, double last) {
+        RealVector result = new ArrayRealVector(4);
+        result.setEntry(0, center3.getEntry(0));
+        result.setEntry(1, center3.getEntry(1));
+        result.setEntry(2, center3.getEntry(2));
+        result.setEntry(3, last);
+        return result;
+    }
 }

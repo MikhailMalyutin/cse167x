@@ -7,6 +7,7 @@ import org.apache.commons.math3.linear.RealVector;
 import scene.*;
 import transform.MatrixUtils;
 import transform.Transform;
+import utils.VectorUtils;
 
 import java.io.File;
 import java.util.Stack;
@@ -53,9 +54,10 @@ public class SceneParser {
                     int[] vertices = readInt(commands, 1, 3);
                     drawed = new TriangleObject(vertices, result, transformStack.peek());
                 } else {//operator.equals("sphere")
-                    RealVector center = readVec3(commands, 1);
+                    RealVector center3 = readVec3(commands, 1);
+                    RealVector center4 = VectorUtils.toRealVector4(center3, 1.0);
                     float radius = Float.valueOf(commands[4]);
-                    drawed = new SphereObject(radius, center, transformStack.peek());
+                    drawed = new SphereObject(radius, center4, transformStack.peek());
                 }
                 drawed.setAmbient(ambient);
                 drawed.setDiffuse(diffuse);

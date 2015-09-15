@@ -11,6 +11,7 @@ public class Intersection {
     private boolean match;
     private DrawedObject object;
     private Vector3D p;
+    private Vector3D n;
     private double distance = Double.MAX_VALUE;
 
     public Intersection(boolean match) {
@@ -42,10 +43,13 @@ public class Intersection {
             return ((TriangleObject)object).getN().scalarMultiply(-1.0);
         }
         if (object instanceof SphereObject) {
-            SphereObject casted = (SphereObject) object;
-            return p.subtract(VectorUtils.toVector3D(casted.getCenter())).scalarMultiply(-1.0);
+            return n;
         }
         return null;
+    }
+
+    public void setN(Vector3D n) {
+        this.n = n;
     }
 
     public void setDistance(double distance) {
