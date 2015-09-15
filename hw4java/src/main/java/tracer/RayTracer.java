@@ -93,7 +93,7 @@ public class RayTracer {
         RealVector pt = transform.preMultiply(pv);
         result.setP(VectorUtils.toVector3D(pt));
         RealVector nv = pv.subtract(obj.getCenter());
-        final RealVector nvt = transformInverse.preMultiply(nv);
+        final RealVector nvt = transformInverse.transpose().preMultiply(nv);
         result.setN(VectorUtils.toVector3D(nvt).normalize());
         result.setDistance(t);
         return result;
