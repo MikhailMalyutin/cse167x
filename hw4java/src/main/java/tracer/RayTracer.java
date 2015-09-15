@@ -49,7 +49,7 @@ public class RayTracer {
         return rc + rg + rb;
     }
 
-    private static Intersection intersect(Ray ray, Model model) {
+    public static Intersection intersect(Ray ray, Model model) {
         Intersection result = new Intersection(false);
         for (DrawedObject obj : model.getObjects()) {
             if (obj instanceof TriangleObject) {

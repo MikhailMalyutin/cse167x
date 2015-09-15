@@ -4,6 +4,8 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.linear.RealVector;
 import tracer.Camera;
 import tracer.Intersection;
+import tracer.Ray;
+import tracer.RayTracer;
 import utils.VectorUtils;
 
 public class LightCalculations {
@@ -16,10 +18,23 @@ public class LightCalculations {
         finalcolor = finalcolor.add(emission);
 
         for (Light light : model.getLights()) {
-            finalcolor = finalcolor.add(calculatePosLight(light, camera, intersection));
+            boolean isVisible = isVisibleFn(light, intersection, model);
+            if (isVisible) {
+                finalcolor = finalcolor.add(calculatePosLight(light, camera, intersection));
+            }
         }
 
         return finalcolor;
+    }
+
+    private static boolean isVisibleFn(Light light, Intersection intersection, Model model) {
+        Ray lightRay = new Ray();
+        lightRay.setP0(light.getLightpos());
+        final RealVector p1 = VectorUtils.toRealVector(intersection.getP()).subtract(light.getLightpos());
+        p1.setEntry(3, 0.0);
+        lightRay.setP1(p1);
+        Intersection intersection1 = RayTracer.intersect(lightRay, model);
+        return intersection1.isMatch() && intersection1.getP().distance(intersection.getP()) < 0.001;
     }
 
     private static RealVector computeLight(Vector3D direction,
