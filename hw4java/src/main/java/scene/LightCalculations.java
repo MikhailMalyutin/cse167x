@@ -9,7 +9,10 @@ import tracer.RayTracer;
 import utils.VectorUtils;
 
 public class LightCalculations {
-    public static RealVector computeLight(Model model, Camera camera, Intersection intersection) {
+
+    private static final int MAX_RECURSION = 2;
+
+    public static RealVector computeLight(Model model, Camera camera, Intersection intersection, int recurseCount) {
         RealVector finalcolor;
 
         final DrawedObject object = intersection.getObject();
@@ -20,7 +23,7 @@ public class LightCalculations {
         for (Light light : model.getLights()) {
             boolean isVisible = isVisibleFn(light, intersection, model);
             if (isVisible) {
-                finalcolor = finalcolor.add(calculatePosLight(light, camera, intersection));
+                finalcolor = finalcolor.add(calculatePosLight(light, camera, intersection, model, recurseCount));
             }
         }
 
@@ -55,7 +58,11 @@ public class LightCalculations {
         return retval;
     }
 
-    private static RealVector calculatePosLight(Light light, Camera camera, Intersection intersection) {
+    private static RealVector calculatePosLight(Light light,
+                                                Camera camera,
+                                                Intersection intersection,
+                                                Model model,
+                                                int recursiveStep) {
         Vector3D mypos = intersection.getP(); // Dehomogenize current location
         Vector3D eyedirn = camera.getW();
         double lightDistance = 0;
@@ -80,10 +87,22 @@ public class LightCalculations {
         RealVector col1 = computeLight(lightDirection, light.getLightcolor(), normal,
                 half1, obj.getDiffuse(), obj.getSpecular(), obj.getShininess()) ;
 
+        if (recursiveStep < MAX_RECURSION) {
+            Ray secondary = new Ray();
+            secondary.setP0(VectorUtils.toRealVector(intersection.getP(), 1.0));
+            Vector3D reflected = getReflection(lightDirection, normal);
+            secondary.setP1(VectorUtils.toRealVector(reflected));
+            Intersection secondaryIntersection = RayTracer.intersect(secondary, model);
+            if (secondaryIntersection.isMatch()) {
+                RealVector secondaryLight = computeLight(model, camera, secondaryIntersection, ++recursiveStep);
+                col1.add(secondaryLight);
+            }
+        }
+
         return col1.mapDivide(light.getAttenuation(lightDistance));
     }
 
-    private Vector3D getReflection(Vector3D l, Vector3D n) {
+    private static Vector3D getReflection(Vector3D l, Vector3D n) {
         return n.scalarMultiply(2.0 * l.dotProduct(n)).subtract(l);
     }
 }
