@@ -67,7 +67,7 @@ public class LightCalculations {
         // Light 1, point
         final RealVector lightpos = light.getLightpos();
         final double lightposW = lightpos.getEntry(3);
-        if (lightposW == 0) {
+        if (light.isDirectional()) {
             direction1 = VectorUtils.toVector3D(lightpos).normalize();
         } else {
             Vector3D position = VectorUtils.toVector3D(lightpos).scalarMultiply(1.0/lightposW);
@@ -78,6 +78,6 @@ public class LightCalculations {
         RealVector col1 = computeLight(direction1, light.getLightcolor(), normal,
                 half1, obj.getDiffuse(), obj.getSpecular(), obj.getShininess()) ;
 
-        return col1 ;
+        return col1.mapDivide(light.getAttenuation(intersection.getDistance()));
     }
 }
