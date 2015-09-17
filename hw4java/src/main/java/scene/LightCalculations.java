@@ -58,26 +58,32 @@ public class LightCalculations {
     private static RealVector calculatePosLight(Light light, Camera camera, Intersection intersection) {
         Vector3D mypos = intersection.getP(); // Dehomogenize current location
         Vector3D eyedirn = camera.getW();
+        double lightDistance = 0;
 
         // Compute normal, needed for shading.
         // Simpler is vec3 normal = normalize(gl_NormalMatrix * mynormal) ;
         Vector3D normal = intersection.getN();
 
-        Vector3D direction1;
+        Vector3D lightDirection;
         // Light 1, point
         final RealVector lightpos = light.getLightpos();
         final double lightposW = lightpos.getEntry(3);
         if (light.isDirectional()) {
-            direction1 = VectorUtils.toVector3D(lightpos).normalize();
+            lightDirection = VectorUtils.toVector3D(lightpos).normalize();
         } else {
-            Vector3D position = VectorUtils.toVector3D(lightpos).scalarMultiply(1.0/lightposW);
-            direction1 = position.subtract(mypos).normalize(); // no attenuation
+            Vector3D lightpos3d = VectorUtils.toVector3D(lightpos).scalarMultiply(1.0 / lightposW);
+            lightDistance = lightpos3d.distance(intersection.getP());
+            lightDirection = lightpos3d.subtract(intersection.getP()).normalize(); // no attenuation
         }
-        Vector3D half1 = direction1.add(eyedirn).normalize();
+        Vector3D half1 = eyedirn.add(lightDirection).normalize();
         DrawedObject obj = intersection.getObject();
-        RealVector col1 = computeLight(direction1, light.getLightcolor(), normal,
+        RealVector col1 = computeLight(lightDirection, light.getLightcolor(), normal,
                 half1, obj.getDiffuse(), obj.getSpecular(), obj.getShininess()) ;
 
-        return col1.mapDivide(light.getAttenuation(intersection.getDistance()));
+        return col1.mapDivide(light.getAttenuation(lightDistance));
+    }
+
+    private Vector3D getReflection(Vector3D l, Vector3D n) {
+        return n.scalarMultiply(2.0 * l.dotProduct(n)).subtract(l);
     }
 }

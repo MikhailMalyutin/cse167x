@@ -18,12 +18,12 @@ public class Main {
 //        ImageIO.write(image, "png", outFileName);
           //renderFile("scene1", "out");
           //renderFile("scene4-ambient");
-        //  renderFile("scene4-diffuse");
-//        renderFile("scene4-emission");
+          renderFile("scene4-diffuse");
+          //renderFile("scene4-emission");
           renderFile("scene4-specular");
-     //   renderFile("scene5");
-    //    renderFile("scene6");
-//        renderFile("scene7");
+          //renderFile("scene5");
+          //renderFile("scene6");
+          //renderFile("scene7");
     }
 
     private static void renderFile(String fileName, String outName) throws Exception {

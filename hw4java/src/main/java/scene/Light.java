@@ -29,7 +29,7 @@ public class Light {
         if (isDirectional()) {
             return 1.f;
         }
-        return 1.;//distance * distance;
+        return 1.0;//distance * distance;
     }
 
     public boolean isPoint() {
