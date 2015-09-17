@@ -63,7 +63,7 @@ public class LightCalculations {
                                                 Intersection intersection,
                                                 Model model,
                                                 int recursiveStep) {
-        Vector3D mypos = intersection.getP(); // Dehomogenize current location
+        Vector3D intersectionPos = intersection.getP(); // Dehomogenize current location
         Vector3D eyedirn = camera.getW();
         double lightDistance = 0;
 
@@ -79,8 +79,8 @@ public class LightCalculations {
             lightDirection = VectorUtils.toVector3D(lightpos).normalize();
         } else {
             Vector3D lightpos3d = VectorUtils.toVector3D(lightpos).scalarMultiply(1.0 / lightposW);
-            lightDistance = lightpos3d.distance(intersection.getP());
-            lightDirection = lightpos3d.subtract(intersection.getP()).normalize(); // no attenuation
+            lightDistance = lightpos3d.distance(intersectionPos);
+            lightDirection = lightpos3d.subtract(intersectionPos).normalize(); // no attenuation
         }
         Vector3D half1 = eyedirn.add(lightDirection).normalize();
         DrawedObject obj = intersection.getObject();
