@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.stream.IntStream;
 
 public class RayTracer {
+
+    private static final double EPSILON = 0.001;
+
     public static BufferedImage render(Model model) {
         Camera cam = getCamera(model);
         BufferedImage result = new BufferedImage(model.getW(), model.getH(), BufferedImage.TYPE_INT_RGB);
@@ -83,7 +86,7 @@ public class RayTracer {
 
         float cc = (float) (p0c.dotProduct(p0c)) - obj.getSize() * obj.getSize();
         Double t = quadraticEquationRoot1(a, b, cc);
-        if (t == null) {
+        if (t == null || t < EPSILON) {
             return new Intersection(false);
         }
         Intersection result = new Intersection(true);
@@ -127,7 +130,7 @@ public class RayTracer {
         double den = p1.dotProduct(n);
         if (den != 0.0) {
             double t = (a.dotProduct(n) - p0.dotProduct(n)) / den;
-            if (t < 0) {
+            if (t < EPSILON) {
                 return new Intersection(false);
             }
             Vector3D p = p0.add(p1.scalarMultiply(t));
