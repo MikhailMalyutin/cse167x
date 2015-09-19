@@ -11,7 +11,7 @@ import utils.VectorUtils;
 
 public class LightCalculations {
 
-    private static final int MAX_RECURSION = 1;
+    private static final int MAX_RECURSION = 5;
 
     public static RealVector computeLight(Vector3D eyePos,
                                           Model model,
@@ -30,6 +30,25 @@ public class LightCalculations {
             if (isVisible) {
                 finalcolor = finalcolor.add(calculatePosLight(light,
                         camera, intersection, eyePos, model, recurseCount));
+            }
+            if (recurseCount < MAX_RECURSION) {
+                Ray reflectedRay = new Ray();
+                Vector3D intersectionPos = intersection.getP();
+                Vector3D eyedirn = intersectionPos.subtract(eyePos).negate().normalize();
+                reflectedRay.setP0(VectorUtils.toRealVector(intersection.getP(), 1.0));
+                Vector3D normal = intersection.getN();
+                Vector3D reflected = getReflection(eyedirn, normal);
+                reflectedRay.setP1(VectorUtils.toRealVector(reflected));
+                Intersection secondaryIntersection = RayTracer.intersect(reflectedRay, model);
+                if (secondaryIntersection.isMatch()) {
+                    RealVector secondaryLight
+                            = computeLight(intersectionPos, model, camera, secondaryIntersection, ++recurseCount);
+                    finalcolor = finalcolor.add(secondaryLight.ebeMultiply(object.getSpecular()));
+//                col1 = new ArrayRealVector(3);
+//                col1.setEntry(0, 1.0);
+//                col1.setEntry(1, 1.0);
+//                col1.setEntry(2, 1.0);
+                }
             }
         }
 
@@ -93,23 +112,6 @@ public class LightCalculations {
         DrawedObject obj = intersection.getObject();
         RealVector col1 = computeLight(lightDirection, light.getLightcolor(), normal,
                 half1, obj.getDiffuse(), obj.getSpecular(), obj.getShininess()) ;
-
-        if (recursiveStep < MAX_RECURSION) {
-            Ray reflectedRay = new Ray();
-            reflectedRay.setP0(VectorUtils.toRealVector(intersection.getP(), 1.0));
-            Vector3D reflected = getReflection(eyedirn, normal);
-            reflectedRay.setP1(VectorUtils.toRealVector(reflected));
-            Intersection secondaryIntersection = RayTracer.intersect(reflectedRay, model);
-            if (secondaryIntersection.isMatch()) {
-                RealVector secondaryLight
-                        = computeLight(intersectionPos, model, camera, secondaryIntersection, ++recursiveStep);
-                col1 = col1.add(secondaryLight.ebeMultiply(obj.getSpecular()));
-//                col1 = new ArrayRealVector(3);
-//                col1.setEntry(0, 1.0);
-//                col1.setEntry(1, 1.0);
-//                col1.setEntry(2, 1.0);
-            }
-        }
 
         return col1.mapDivide(light.getAttenuation(lightDistance));
     }
