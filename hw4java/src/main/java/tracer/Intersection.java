@@ -13,6 +13,7 @@ public class Intersection {
     private Vector3D p;
     private Vector3D n;
     private double distance = Double.MAX_VALUE;
+    private int intersectionCount = 0;
 
     public Intersection(boolean match) {
         this.match = match;
@@ -58,5 +59,13 @@ public class Intersection {
 
     public double getDistance() {
         return distance;
+    }
+
+    public int getIntersectionCount() {
+        return intersectionCount;
+    }
+
+    public void setIntersectionCount(int intersectionCount) {
+        this.intersectionCount = intersectionCount;
     }
 }

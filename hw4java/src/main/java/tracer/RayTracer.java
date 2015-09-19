@@ -54,21 +54,30 @@ public class RayTracer {
 
     public static Intersection intersect(Ray ray, Model model) {
         Intersection result = new Intersection(false);
+        int matchCount = 0;
         for (DrawedObject obj : model.getObjects()) {
             if (obj instanceof TriangleObject) {
                 Intersection intersection = getIntersection(ray, (TriangleObject) obj, model);
-                if (intersection.isMatch() && intersection.getDistance() < result.getDistance()) {
+                final boolean match = intersection.isMatch();
+                if (match) {
+                    ++matchCount;
+                }
+                if (match && intersection.getDistance() < result.getDistance()) {
                     result = intersection;
                 }
             } else if (obj instanceof SphereObject) {
                 Intersection intersection = getIntersection(ray, (SphereObject) obj, model);
-                if (intersection.isMatch() && intersection.getDistance() < result.getDistance()) {
+                final boolean match = intersection.isMatch();
+                if (match) {
+                    ++matchCount;
+                }
+                if (match && intersection.getDistance() < result.getDistance()) {
                     result = intersection;
                 }
             }
 
         }
-
+        result.setIntersectionCount(matchCount);
         return result;
     }
 
