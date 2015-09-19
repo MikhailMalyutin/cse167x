@@ -53,6 +53,7 @@ public class Light {
     public void setAttenuation(RealVector attenuation) {
         if (attenuation == null) {
             this.attenuation = getDefault();
+            return;
         }
         this.attenuation = attenuation;
     }
