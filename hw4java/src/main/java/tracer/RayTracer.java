@@ -36,8 +36,7 @@ public class RayTracer {
 
     private static int findColor(Intersection hit, Camera cam, Model model) {
         if (hit.isMatch()) {
-            Vector3D eyeDir = cam.getW();
-            RealVector light = LightCalculations.computeLight(eyeDir, model, cam, hit, 0);
+            RealVector light = LightCalculations.computeLight(cam.getFrom3(), model, cam, hit, 0);
             return toColour(light);
         }
         return 0;
