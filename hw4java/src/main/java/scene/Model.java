@@ -46,6 +46,7 @@ public class Model {
     private RealVector to;
     private RealVector up;
     private float fov;
+    private RealVector attenuation;
 
     public int getW() {
         return w;
@@ -133,5 +134,13 @@ public class Model {
 
     public float getFov() {
         return fov;
+    }
+
+    public void setAttenuation(RealVector attenuation) {
+        this.attenuation = attenuation;
+    }
+
+    public RealVector getAttenuation() {
+        return attenuation;
     }
 }

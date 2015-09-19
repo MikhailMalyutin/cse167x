@@ -44,10 +44,13 @@ public class SceneParser {
                 RealVector point = toVector4(point3, 1.0);
                 final Light light = new Light();
                 light.setLightpos(point);
+                light.setAttenuation(result.getAttenuation());
                 light.setLightcolor(readVec3(commands, 4));
                 result.getLights().add(light);
             } else if (operator.equals("vertex")) {
                 result.getVertices().add(readVec4(commands, 1));
+            } else if (operator.equals("attenuation")) {
+                result.setAttenuation(readVec3(commands, 1));
             } else if (operator.equals("tri") || operator.equals("sphere")) {
                 DrawedObject drawed;
                 if (operator.equals("tri")) {

@@ -71,7 +71,7 @@ public class LightCalculations {
         RealVector lightDirection = light.isDirectional()
                 ? light.getLightpos()
                 : VectorUtils.toRealVector(intersection.getP()).subtract(light.getLightpos());
-        lightRay.setP1(lightDirection.mapMultiply(-1.0));
+        lightRay.setP1(lightDirection);
         final RealVector intersectionP = VectorUtils.toRealVector(intersection.getP(), 1.0);
         lightRay.setP0(intersectionP);
         Intersection intersection1 = RayTracer.intersect(lightRay, model);
