@@ -57,12 +57,15 @@ public class LightCalculations {
 
     private static boolean isVisibleFn(Light light, Intersection intersection, Model model) {
         Ray lightRay = new Ray();
-        lightRay.setP0(light.getLightpos());
-        final RealVector p1 = VectorUtils.toRealVector(intersection.getP()).subtract(light.getLightpos());
-        p1.setEntry(3, 0.0);
-        lightRay.setP1(p1);
+
+        RealVector lightDirection = light.isDirectional()
+                ? light.getLightpos()
+                : VectorUtils.toRealVector(intersection.getP()).subtract(light.getLightpos());
+        lightRay.setP1(lightDirection.mapMultiply(-1.0));
+        final RealVector intersectionP = VectorUtils.toRealVector(intersection.getP(), 1.0);
+        lightRay.setP0(intersectionP);
         Intersection intersection1 = RayTracer.intersect(lightRay, model);
-        return intersection1.isMatch() && intersection1.getP().distance(intersection.getP()) < 0.001;
+        return !(intersection1.isMatch() && intersection1.getP().distance(intersection.getP()) < RayTracer.EPSILON);
     }
 
     private static RealVector computeLight(Vector3D direction,

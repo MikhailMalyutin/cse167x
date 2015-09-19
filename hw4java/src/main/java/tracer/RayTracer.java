@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 public class RayTracer {
 
-    private static final double EPSILON = 0.001;
+    public static final double EPSILON = 0.001;
 
     public static BufferedImage render(Model model) {
         Camera cam = getCamera(model);
