@@ -60,10 +60,8 @@ public class LightCalculations {
 
         Vector3D pToward = intersection.getPPlusEpsilon();
         final RealVector intersectionP = VectorUtils.toRealVector(pToward, 1.0);
-        RealVector lightDirection = light.isDirectional()
-                ? light.getLightpos()
-                : intersection.getPVector().subtract(light.getLightpos()).mapMultiply(-1.0);
-        lightRay.setP1(lightDirection.mapDivide(lightDirection.getNorm()));
+        RealVector lightDirection = light.getLightpos();
+        lightRay.setP1(lightDirection);
         lightRay.setP0(intersectionP);
         Intersection intersection1 = RayTracer.intersect(lightRay, model);
         if (intersection1.isMatch()) {

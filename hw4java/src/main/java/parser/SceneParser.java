@@ -34,7 +34,7 @@ public class SceneParser {
                 result.setH(Integer.parseInt(commands[2]));
             } else if (operator.equals("directional")) {
                 final RealVector direction3 = readVec3(commands, 1);
-                RealVector direction = toVector4(direction3, 0.0);
+                RealVector direction = toVector4(direction3, 0.0).mapDivide(direction3.getNorm());
                 final Light light = new Light();
                 light.setLightpos(direction);
                 light.setLightcolor(readVec3(commands, 4));
