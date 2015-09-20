@@ -31,8 +31,8 @@ public class LightCalculations {
             if (recurseCount < model.getMaxDepth()) {
                 Ray reflectedRay = new Ray();
                 Vector3D intersectionPos = intersection.getP();
-                Vector3D eyedirn = intersectionPos.subtract(eyePos).negate().normalize();
-                reflectedRay.setP0(VectorUtils.toRealVector(intersection.getP(), 1.0));
+                Vector3D eyedirn = eyePos.subtract(intersectionPos).normalize();
+                reflectedRay.setP0(intersection.getPVector());
                 Vector3D normal = intersection.getN();
                 Vector3D reflected = getReflection(eyedirn, normal);
                 reflectedRay.setP1(VectorUtils.toRealVector(reflected));
@@ -41,10 +41,6 @@ public class LightCalculations {
                     RealVector secondaryLight
                             = computeLight(intersectionPos, model, camera, secondaryIntersection, ++recurseCount);
                     finalcolor = finalcolor.add(secondaryLight.ebeMultiply(object.getSpecular()));
-//                col1 = new ArrayRealVector(3);
-//                col1.setEntry(0, 1.0);
-//                col1.setEntry(1, 1.0);
-//                col1.setEntry(2, 1.0);
                 }
             }
         }
