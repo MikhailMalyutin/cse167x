@@ -27,20 +27,20 @@ public class LightCalculations {
                 finalcolor = finalcolor.add(calculatePosLight(light,
                         intersection, eyePos));
             }
-            if (recurseCount < model.getMaxDepth() && specularityNorm != 0) {
-                Ray reflectedRay = new Ray();
-                Vector3D intersectionPos = intersection.getP();
-                Vector3D eyedirn = eyePos.subtract(intersectionPos).normalize();
-                reflectedRay.setP0(intersection.getPVector());
-                Vector3D normal = intersection.getN();
-                Vector3D reflected = getReflection(eyedirn, normal);
-                reflectedRay.setP1(VectorUtils.toRealVector(reflected));
-                Intersection secondaryIntersection = RayTracer.intersect(reflectedRay, model);
-                if (secondaryIntersection.isMatch()) {
-                    RealVector secondaryLight
-                            = computeLight(intersectionPos, model, secondaryIntersection, ++recurseCount);
-                    finalcolor = finalcolor.add(secondaryLight.ebeMultiply(specularity));
-                }
+        }
+        if (recurseCount < model.getMaxDepth() && specularityNorm != 0) {
+            Ray reflectedRay = new Ray();
+            Vector3D intersectionPos = intersection.getP();
+            Vector3D eyedirn = eyePos.subtract(intersectionPos).normalize();
+            reflectedRay.setP0(intersection.getPVector());
+            Vector3D normal = intersection.getN();
+            Vector3D reflected = getReflection(eyedirn, normal);
+            reflectedRay.setP1(VectorUtils.toRealVector(reflected));
+            Intersection secondaryIntersection = RayTracer.intersect(reflectedRay, model);
+            if (secondaryIntersection.isMatch()) {
+                RealVector secondaryLight
+                        = computeLight(intersectionPos, model, secondaryIntersection, ++recurseCount);
+                finalcolor = finalcolor.add(secondaryLight.ebeMultiply(specularity));
             }
         }
 
