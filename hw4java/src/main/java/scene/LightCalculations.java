@@ -29,7 +29,7 @@ public class LightCalculations {
             boolean isVisible = isVisibleFn(light, intersection, model);
             if (isVisible) {
                 finalcolor = finalcolor.add(calculatePosLight(light,
-                        camera, intersection, eyePos, model, recurseCount));
+                        intersection, eyePos));
             }
             if (recurseCount < MAX_RECURSION) {
                 Ray reflectedRay = new Ray();
@@ -59,24 +59,25 @@ public class LightCalculations {
         if (light.isPoint()) {
             Ray lightRay = new Ray();
             lightRay.setP0(light.getLightpos());
-            final RealVector p1 = VectorUtils.toRealVector(intersection.getP()).subtract(light.getLightpos());
-            p1.setEntry(3, 0.0);
+            final RealVector p1 = intersection.getPVector().subtract(light.getLightpos());
             lightRay.setP1(p1);
             Intersection intersection1 = RayTracer.intersect(lightRay, model);
             return intersection1.isMatch() && intersection1.getP().distance(intersection.getP()) < RayTracer.EPSILON;
-
         }
         Ray lightRay = new Ray();
 
+        Vector3D pToward = intersection.getPPlusEpsilon();
+        final RealVector intersectionP = VectorUtils.toRealVector(pToward, 1.0);
         RealVector lightDirection = light.isDirectional()
                 ? light.getLightpos()
-                : VectorUtils.toRealVector(intersection.getP()).subtract(light.getLightpos());
-        lightRay.setP1(lightDirection);
-        final RealVector intersectionP = VectorUtils.toRealVector(intersection.getP(), 1.0);
+                : intersection.getPVector().subtract(light.getLightpos()).mapMultiply(-1.0);
+        lightRay.setP1(lightDirection.mapDivide(lightDirection.getNorm()));
         lightRay.setP0(intersectionP);
         Intersection intersection1 = RayTracer.intersect(lightRay, model);
-        return !intersection1.isMatch()
-                || (intersection1.getIntersectionCount() == 1 && intersection1.getP().distance(intersection.getP()) < RayTracer.EPSILON);
+        if (intersection1.isMatch()) {
+           // System.out.print("Match");
+        }
+        return !intersection1.isMatch();
     }
 
     private static RealVector computeLight(Vector3D direction,
@@ -98,11 +99,8 @@ public class LightCalculations {
     }
 
     private static RealVector calculatePosLight(Light light,
-                                                Camera camera,
                                                 Intersection intersection,
-                                                Vector3D eyePos,
-                                                Model model,
-                                                int recursiveStep) {
+                                                Vector3D eyePos) {
         Vector3D intersectionPos = intersection.getP(); // Dehomogenize current location
         double lightDistance = 0;
 

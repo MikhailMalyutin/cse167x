@@ -11,6 +11,7 @@ public class Intersection {
     private boolean match;
     private DrawedObject object;
     private Vector3D p;
+    private RealVector pv;
     private Vector3D n;
     private double distance = Double.MAX_VALUE;
     private int intersectionCount = 0;
@@ -25,6 +26,9 @@ public class Intersection {
 
     public void setObject(DrawedObject object) {
         this.object = object;
+        if (object instanceof TriangleObject) {
+            n =((TriangleObject)object).getN().scalarMultiply(-1.0);
+        }
     }
 
     public DrawedObject getObject() {
@@ -33,20 +37,26 @@ public class Intersection {
 
     public void setP(Vector3D p) {
         this.p = p;
+        this.pv = VectorUtils.toRealVector(p, 1.0);
     }
 
     public Vector3D getP() {
         return p;
     }
 
-    public Vector3D getN() {
+    public RealVector getPVector() {
+        return pv;
+    }
+
+    public Vector3D getPPlusEpsilon() {
         if (object instanceof TriangleObject) {
-            return ((TriangleObject)object).getN().scalarMultiply(-1.0);
+            return p.add(getN().scalarMultiply(RayTracer.EPSILON));
         }
-        if (object instanceof SphereObject) {
-            return n;
-        }
-        return null;
+        return p.add(getN().scalarMultiply(RayTracer.EPSILON));
+    }
+
+    public Vector3D getN() {
+        return n;
     }
 
     public void setN(Vector3D n) {
