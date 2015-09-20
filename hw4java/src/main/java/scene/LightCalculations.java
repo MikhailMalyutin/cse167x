@@ -19,13 +19,15 @@ public class LightCalculations {
         final RealVector emission = object.getEmission();
         finalcolor = finalcolor.add(emission);
 
+        final RealVector specularity = object.getSpecular();
+        final double specularityNorm = specularity.getNorm();
         for (Light light : model.getLights()) {
             boolean isVisible = isVisibleFn(light, intersection, model);
             if (isVisible) {
                 finalcolor = finalcolor.add(calculatePosLight(light,
                         intersection, eyePos));
             }
-            if (recurseCount < model.getMaxDepth()) {
+            if (recurseCount < model.getMaxDepth() && specularityNorm != 0) {
                 Ray reflectedRay = new Ray();
                 Vector3D intersectionPos = intersection.getP();
                 Vector3D eyedirn = eyePos.subtract(intersectionPos).normalize();
@@ -37,7 +39,7 @@ public class LightCalculations {
                 if (secondaryIntersection.isMatch()) {
                     RealVector secondaryLight
                             = computeLight(intersectionPos, model, secondaryIntersection, ++recurseCount);
-                    finalcolor = finalcolor.add(secondaryLight.ebeMultiply(object.getSpecular()));
+                    finalcolor = finalcolor.add(secondaryLight.ebeMultiply(specularity));
                 }
             }
         }
