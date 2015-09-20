@@ -11,7 +11,7 @@ import utils.VectorUtils;
 
 public class LightCalculations {
 
-    private static final int MAX_RECURSION = 5;
+    private static final int MAX_RECURSION = 1;
 
     public static RealVector computeLight(Vector3D eyePos,
                                           Model model,
