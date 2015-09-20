@@ -21,7 +21,7 @@ public class Main {
 //          renderFile("scene4-diffuse");
 //          renderFile("scene4-emission");
 //          renderFile("scene4-specular");
-          renderFile("scene5");
+          //renderFile("scene5");
           renderFile("scene6");
           //renderFile("scene7");
     }

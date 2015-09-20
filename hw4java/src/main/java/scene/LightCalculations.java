@@ -1,9 +1,7 @@
 package scene;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import tracer.Camera;
 import tracer.Intersection;
 import tracer.Ray;
 import tracer.RayTracer;
@@ -12,7 +10,6 @@ import utils.VectorUtils;
 public class LightCalculations {
     public static RealVector computeLight(Vector3D eyePos,
                                           Model model,
-                                          Camera camera,
                                           Intersection intersection,
                                           int recurseCount) {
         RealVector finalcolor;
@@ -39,7 +36,7 @@ public class LightCalculations {
                 Intersection secondaryIntersection = RayTracer.intersect(reflectedRay, model);
                 if (secondaryIntersection.isMatch()) {
                     RealVector secondaryLight
-                            = computeLight(intersectionPos, model, camera, secondaryIntersection, ++recurseCount);
+                            = computeLight(intersectionPos, model, secondaryIntersection, ++recurseCount);
                     finalcolor = finalcolor.add(secondaryLight.ebeMultiply(object.getSpecular()));
                 }
             }
