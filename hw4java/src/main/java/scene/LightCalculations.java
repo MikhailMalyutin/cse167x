@@ -10,9 +10,6 @@ import tracer.RayTracer;
 import utils.VectorUtils;
 
 public class LightCalculations {
-
-    private static final int MAX_RECURSION = 1;
-
     public static RealVector computeLight(Vector3D eyePos,
                                           Model model,
                                           Camera camera,
@@ -31,7 +28,7 @@ public class LightCalculations {
                 finalcolor = finalcolor.add(calculatePosLight(light,
                         intersection, eyePos));
             }
-            if (recurseCount < MAX_RECURSION) {
+            if (recurseCount < model.getMaxDepth()) {
                 Ray reflectedRay = new Ray();
                 Vector3D intersectionPos = intersection.getP();
                 Vector3D eyedirn = intersectionPos.subtract(eyePos).negate().normalize();

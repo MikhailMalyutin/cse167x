@@ -47,6 +47,7 @@ public class Model {
     private RealVector up;
     private float fov;
     private RealVector attenuation;
+    private Integer maxDepth = 5;
 
     public int getW() {
         return w;
@@ -142,5 +143,13 @@ public class Model {
 
     public RealVector getAttenuation() {
         return attenuation;
+    }
+
+    public void setMaxDepth(Integer maxDepth) {
+        this.maxDepth = maxDepth;
+    }
+
+    public Integer getMaxDepth() {
+        return maxDepth;
     }
 }

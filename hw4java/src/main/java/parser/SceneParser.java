@@ -49,6 +49,8 @@ public class SceneParser {
                 result.getLights().add(light);
             } else if (operator.equals("vertex")) {
                 result.getVertices().add(readVec4(commands, 1));
+            } else if (operator.equals("maxdepth")) {
+                result.setMaxDepth(Integer.valueOf(commands[1]));
             } else if (operator.equals("attenuation")) {
                 result.setAttenuation(readVec3(commands, 1));
             } else if (operator.equals("tri") || operator.equals("sphere")) {
